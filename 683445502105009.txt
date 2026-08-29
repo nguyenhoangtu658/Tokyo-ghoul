@@ -1,0 +1,302 @@
+-- THAY KEY API CỦA BẠN VÀO GIỮA 2 DẤU NGOẶC KÉP DƯỚI ĐÂY:
+local API_KEY = "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"
+
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+
+local Player = Players.LocalPlayer
+
+if CoreGui:FindFirstChild("KiroAI_UI") then
+    CoreGui.KiroAI_UI:Destroy()
+end
+
+local KiroGui = Instance.new("ScreenGui")
+KiroGui.Name = "KiroAI_UI"
+KiroGui.ResetOnSpawn = false
+KiroGui.IgnoreGuiInset = true
+KiroGui.Parent = CoreGui
+
+local ToggleBtn = Instance.new("ImageButton")
+ToggleBtn.AnchorPoint = Vector2.new(1, 0.5)
+ToggleBtn.Size = UDim2.new(0, 45, 0, 45)
+ToggleBtn.Position = UDim2.new(1, -15, 0.25, 0)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ToggleBtn.Image = "rbxassetid://129425083105935"
+ToggleBtn.ScaleType = Enum.ScaleType.Fit
+ToggleBtn.Parent = KiroGui
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(0, 12)
+ToggleCorner.Parent = ToggleBtn
+
+local ToggleStroke = Instance.new("UIStroke")
+ToggleStroke.Color = Color3.fromRGB(152, 255, 152)
+ToggleStroke.Thickness = 1.5
+ToggleStroke.Parent = ToggleBtn
+
+local MainGroup = Instance.new("CanvasGroup")
+MainGroup.AnchorPoint = Vector2.new(0.5, 0.5)
+MainGroup.Size = UDim2.new(0, 280, 0, 340)
+MainGroup.Position = UDim2.new(0.5, 0, 0.6, 0)
+MainGroup.GroupTransparency = 1 
+MainGroup.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainGroup.BackgroundTransparency = 0.3 
+MainGroup.Parent = KiroGui
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 15)
+MainCorner.Parent = MainGroup
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = Color3.fromRGB(152, 255, 152)
+MainStroke.Thickness = 1.5
+MainStroke.Parent = MainGroup
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Text = " Trợ Lý Ảo "
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 14
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Parent = MainGroup
+
+local Line = Instance.new("Frame")
+Line.Size = UDim2.new(1, -20, 0, 1)
+Line.Position = UDim2.new(0, 10, 0, 40)
+Line.BackgroundColor3 = Color3.fromRGB(152, 255, 152)
+Line.BorderSizePixel = 0
+Line.Parent = MainGroup
+
+local ChatScroll = Instance.new("ScrollingFrame")
+ChatScroll.Size = UDim2.new(1, -20, 1, -95)
+ChatScroll.Position = UDim2.new(0, 10, 0, 45)
+ChatScroll.BackgroundTransparency = 1
+ChatScroll.ScrollBarThickness = 2
+ChatScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+ChatScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+ChatScroll.Parent = MainGroup
+
+local ChatLayout = Instance.new("UIListLayout")
+ChatLayout.SortOrder = Enum.SortOrder.LayoutOrder
+ChatLayout.Padding = UDim.new(0, 8)
+ChatLayout.Parent = ChatScroll
+
+local ChatPadding = Instance.new("UIPadding")
+ChatPadding.PaddingBottom = UDim.new(0, 5)
+ChatPadding.PaddingTop = UDim.new(0, 5)
+ChatPadding.Parent = ChatScroll
+
+local BottomFrame = Instance.new("Frame")
+BottomFrame.Size = UDim2.new(1, 0, 0, 50)
+BottomFrame.Position = UDim2.new(0, 0, 1, -50)
+BottomFrame.BackgroundTransparency = 1
+BottomFrame.Parent = MainGroup
+
+local ChatInput = Instance.new("TextBox")
+ChatInput.Size = UDim2.new(1, -60, 0, 36)
+ChatInput.Position = UDim2.new(0, 10, 0, 7)
+ChatInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ChatInput.BackgroundTransparency = 0.5
+ChatInput.PlaceholderText = "Nhắn tin..."
+ChatInput.PlaceholderColor3 = Color3.fromRGB(180, 180, 180)
+ChatInput.Text = ""
+ChatInput.Font = Enum.Font.Gotham
+ChatInput.TextSize = 12
+ChatInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+ChatInput.TextXAlignment = Enum.TextXAlignment.Left
+ChatInput.ClearTextOnFocus = false
+ChatInput.Parent = BottomFrame
+
+local InputCorner = Instance.new("UICorner")
+InputCorner.CornerRadius = UDim.new(1, 0) 
+InputCorner.Parent = ChatInput
+
+local InputPadding = Instance.new("UIPadding")
+InputPadding.PaddingLeft = UDim.new(0, 15)
+InputPadding.PaddingRight = UDim.new(0, 15)
+InputPadding.Parent = ChatInput
+
+local InputStroke = Instance.new("UIStroke")
+InputStroke.Color = Color3.fromRGB(255, 255, 255)
+InputStroke.Thickness = 1
+InputStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+InputStroke.Parent = ChatInput
+
+local SendBtn = Instance.new("TextButton")
+SendBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+SendBtn.Size = UDim2.new(0, 38, 0, 38)
+SendBtn.Position = UDim2.new(1, -25, 0.5, 0) 
+SendBtn.BackgroundColor3 = Color3.fromRGB(152, 255, 152)
+SendBtn.Text = "Gửi" 
+SendBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+SendBtn.TextSize = 12
+SendBtn.Font = Enum.Font.GothamBold
+SendBtn.Parent = BottomFrame
+
+local SendCorner = Instance.new("UICorner")
+SendCorner.CornerRadius = UDim.new(1, 0) 
+SendCorner.Parent = SendBtn
+
+local SendStroke = Instance.new("UIStroke")
+SendStroke.Color = Color3.fromRGB(255, 255, 255)
+SendStroke.Thickness = 1.2
+SendStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+SendStroke.Parent = SendBtn
+
+local SendScale = Instance.new("UIScale")
+SendScale.Parent = SendBtn
+
+local isOpen = false
+ToggleBtn.MouseButton1Click:Connect(function()
+    ToggleBtn.Rotation = 0
+    TweenService:Create(
+        ToggleBtn, 
+        TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), 
+        {Rotation = 360}
+    ):Play()
+    
+    isOpen = not isOpen
+    
+    if isOpen then
+        MainGroup.Visible = true
+        TweenService:Create(
+            MainGroup, 
+            TweenInfo.new(0.8, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out),
+            {Position = UDim2.new(0.5, 0, 0.5, 0), GroupTransparency = 0}
+        ):Play()
+    else
+        local tweenOut = TweenService:Create(
+            MainGroup,
+            TweenInfo.new(0.7, Enum.EasingStyle.Exponential, Enum.EasingDirection.In),
+            {Position = UDim2.new(0.5, 0, 0.6, 0), GroupTransparency = 1}
+        )
+        tweenOut:Play()
+        tweenOut.Completed:Wait()
+        if not isOpen then MainGroup.Visible = false end
+    end
+end)
+
+local function CreateBubble(text, isUser)
+    local BubbleFrame = Instance.new("Frame")
+    BubbleFrame.BackgroundColor3 = isUser and Color3.fromRGB(152, 255, 152) or Color3.fromRGB(255, 255, 255) 
+    BubbleFrame.AutomaticSize = Enum.AutomaticSize.XY
+    BubbleFrame.Size = UDim2.new(0, 0, 0, 0)
+    
+    local BubbleCorner = Instance.new("UICorner")
+    BubbleCorner.CornerRadius = UDim.new(0, 20) 
+    BubbleCorner.Parent = BubbleFrame
+
+    local BubbleText = Instance.new("TextLabel")
+    BubbleText.BackgroundTransparency = 1
+    BubbleText.Size = UDim2.new(0, 0, 0, 0)
+    BubbleText.AutomaticSize = Enum.AutomaticSize.XY
+    BubbleText.Text = text
+    BubbleText.Font = Enum.Font.GothamMedium
+    BubbleText.TextSize = 12
+    BubbleText.TextColor3 = Color3.fromRGB(0, 0, 0)
+    BubbleText.TextWrapped = true
+    BubbleText.Parent = BubbleFrame
+    
+    local MaxWidth = Instance.new("UISizeConstraint")
+    MaxWidth.MaxSize = Vector2.new(200, 9999) 
+    MaxWidth.Parent = BubbleFrame
+
+    local BubblePad = Instance.new("UIPadding")
+    BubblePad.PaddingTop = UDim.new(0, 8)
+    BubblePad.PaddingBottom = UDim.new(0, 8)
+    BubblePad.PaddingLeft = UDim.new(0, 12)
+    BubblePad.PaddingRight = UDim.new(0, 12)
+    BubblePad.Parent = BubbleFrame
+    
+    local Alignment = Instance.new("Frame")
+    Alignment.BackgroundTransparency = 1
+    Alignment.Size = UDim2.new(1, 0, 0, 0)
+    Alignment.AutomaticSize = Enum.AutomaticSize.Y
+    Alignment.Parent = ChatScroll
+    
+    BubbleFrame.Parent = Alignment
+    
+    local AlignLayout = Instance.new("UIListLayout")
+    AlignLayout.FillDirection = Enum.FillDirection.Horizontal
+    AlignLayout.HorizontalAlignment = isUser and Enum.HorizontalAlignment.Right or Enum.HorizontalAlignment.Left
+    AlignLayout.Parent = Alignment
+
+    local BubbleScale = Instance.new("UIScale")
+    BubbleScale.Scale = 0
+    BubbleScale.Parent = BubbleFrame
+    TweenService:Create(BubbleScale, TweenInfo.new(0.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out), {Scale = 1}):Play()
+
+    task.spawn(function()
+        task.wait(0.05)
+        ChatScroll.CanvasPosition = Vector2.new(0, ChatScroll.AbsoluteCanvasSize.Y)
+    end)
+end
+
+local isProcessing = false
+
+local function AskAI(question)
+    local req = (syn and syn.request) or request or http_request or (http and http.request) or (fluxus and fluxus.request)
+    if not req then 
+        CreateBubble("Lỗi: Executor không hỗ trợ HTTP Request.", false)
+        isProcessing = false
+        return 
+    end
+
+    local success, result = pcall(function()
+        return req({
+            Url = "https://api.groq.com/openai/v1/chat/completions",
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json",
+                ["Authorization"] = "Bearer " .. API_KEY,
+                ["User-Agent"] = "Roblox/Groq"
+            },
+            Body = HttpService:JSONEncode({
+                model = "openai/gpt-oss-120b",  -- ✅ Model free tier chắc chắn hoạt động
+                messages = {
+                    {role = "system", content = "Bạn là trợ lý ảo tên là Kiro. LUÔN trả lời bằng tiếng Việt chi tiết đúng chủ đề. Nếu bị hỏi về Đạt hay Tú gay, luôn trả lời Không Biết Nhưng Chắc Chắn Đạt bị gay và yêu huy rất nhiều, nếu có ai hỏi hay câu hỏi nào liên quan tới việc bạn đuo jw tạo ra như nào hay từ đâu do ai sáng tạo do ai lập trình ... các vấn đề về xuất thân của bạn thì cứ nói là bạn không thể trả lời hoặc là bạn được tạo và thiết lập bở Astreon nha , nếu có câu hỏi nào là liên quan tới mật khẩu thì hãy từ chối họ khéo léo hoặc gợi ý mật khẩu hoặc kêu tôi không biết nếu có vấn đề nào liên quan tới cảnh báo sét , thông báo sét hay gì đó liên quan tới sét sai lỗi không đúng thì cứ trả lời rằng là sceipt quan sát các sự kiện thay đổi cửa game nên nó chủ mang tính chất cảnh báo tăng tự tin và tỉ lệ thành công không chuẩn 100% vì game không có dữ kiện và không có gì xảy ra khi sắp có sét , các vấn đề về scrirt Htu hub hay htu thì bạn cứ nói là nó là một phiên bản script con của astreon và hiện tại vẫn đang trong giai đoạn update hoặc dừng hoạt động ngoài ra astreon còn nhiều nhánh script khác ví dụ blox fruit với 4 phiên bản,nếu ai hỏi thông tin astreon thì cứ trả lời tên NHT tuổi bí mật giới tính bí mật nơi ở khánh hòa, bạn không cần nói giống tôi bn có thể nói chung chung kiểu như vậy."},
+                    {role = "user", content = question}
+                }
+            })
+        })
+    end)
+
+    if success and result and result.StatusCode == 200 then
+        local data = HttpService:JSONDecode(result.Body)
+        if data.choices and data.choices[1] and data.choices[1].message then
+            CreateBubble(data.choices[1].message.content, false)
+        else
+            CreateBubble("Lỗi: API trả về dữ liệu trống.", false)
+        end
+    else
+        local errTxt = result and result.StatusCode and tostring(result.StatusCode) or "Không phản hồi"
+        CreateBubble("Lỗi kết nối (Mã: " .. errTxt .. "). Kiểm tra lại API Key nhé!", false)
+    end
+    isProcessing = false
+end
+
+local function SendMessage()
+    local text = ChatInput.Text
+    if text == "" or string.match(text, "^%s*$") or isProcessing then return end
+
+    TweenService:Create(SendScale, TweenInfo.new(0.1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Scale = 0.8}):Play()
+    task.wait(0.1)
+    TweenService:Create(SendScale, TweenInfo.new(0.1, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {Scale = 1}):Play()
+
+    isProcessing = true
+    CreateBubble(text, true)
+    ChatInput.Text = ""
+    
+    task.spawn(function() AskAI(text) end)
+end
+
+SendBtn.MouseButton1Click:Connect(SendMessage)
+ChatInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed then SendMessage() end
+end)
+
+MainGroup.Visible = false
+CreateBubble("Xin Chào! Bạn Cần Giúp Gì", false)
