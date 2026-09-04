@@ -1,5 +1,5 @@
 -- THAY KEY API CỦA BẠN VÀO GIỮA 2 DẤU NGOẶC KÉP DƯỚI ĐÂY:
-local API_KEY = "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"
+local API_KEY = "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"
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
