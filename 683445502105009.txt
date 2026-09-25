@@ -1,5 +1,27 @@
--- THAY KEY API CỦA BẠN VÀO GIỮA 2 DẤU NGOẶC KÉP DƯỚI ĐÂY:
-local API_KEY = "https://raw.githubusercontent.com/nguyenhoangtu658/Tokyo-ghoul/refs/heads/main/Cac"
+-- ĐIỀN LINK RAW GITHUB CỦA BẠN VÀO ĐÂY:
+local KEY_URL = "https://raw.githubusercontent.com/nguyenhoangtu658/Tokyo-ghoul/refs/heads/main/Cac"
+local API_KEY = ""
+
+-- Lấy hàm request hỗ trợ cho mọi loại executor
+local req = (syn and syn.request) or request or http_request or (http and http.request) or (fluxus and fluxus.request)
+
+-- Tự động lấy KEY từ Github trước khi chạy UI
+if req then
+    local success, res = pcall(function()
+        return req({
+            Url = KEY_URL,
+            Method = "GET"
+        })
+    end)
+    
+    if success and res and res.StatusCode == 200 then
+        -- result.Body chứa nội dung file. string.gsub dùng để xóa mọi khoảng trắng/xuống dòng thừa
+        API_KEY = string.gsub(res.Body, "%s+", "")
+        print("Đã lấy thành công API KEY từ Github!")
+    else
+        warn("Không thể đọc API Key từ link Github, vui lòng kiểm tra lại link!")
+    end
+end
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
@@ -238,11 +260,16 @@ end
 local isProcessing = false
 
 local function AskAI(question)
-    local req = (syn and syn.request) or request or http_request or (http and http.request) or (fluxus and fluxus.request)
     if not req then 
         CreateBubble("Lỗi: Executor không hỗ trợ HTTP Request.", false)
         isProcessing = false
         return 
+    end
+
+    if API_KEY == "" then
+        CreateBubble("Lỗi: Không tìm thấy API Key từ Github. Link bị lỗi hoặc chưa đúng định dạng Raw!", false)
+        isProcessing = false
+        return
     end
 
     local success, result = pcall(function()
@@ -299,4 +326,9 @@ ChatInput.FocusLost:Connect(function(enterPressed)
 end)
 
 MainGroup.Visible = false
-CreateBubble("Xin Chào! Bạn Cần Giúp Gì", false)
+
+if API_KEY ~= "" then
+    CreateBubble("Xin Chào! Bạn Cần Giúp Gì", false)
+else
+    CreateBubble("Lỗi: Không tải được API key từ Github. Hãy kiểm tra lại F9 / Console.", false)
+end
