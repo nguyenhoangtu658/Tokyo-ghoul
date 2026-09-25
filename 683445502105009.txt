@@ -17,9 +17,9 @@ if req then
     if success and res and res.StatusCode == 200 then
         -- result.Body chứa nội dung file. string.gsub dùng để xóa mọi khoảng trắng/xuống dòng thừa
         API_KEY = string.gsub(res.Body, "%s+", "")
-        print("Đã lấy thành công API KEY từ Github!")
+        print("Đã Lấy Mã Nguồn")
     else
-        warn("Không thể đọc API Key từ link Github, vui lòng kiểm tra lại link!")
+        warn("Không Thể Đọc Mã Nguồn")
     end
 end
 
@@ -267,7 +267,7 @@ local function AskAI(question)
     end
 
     if API_KEY == "" then
-        CreateBubble("Lỗi: Không tìm thấy API Key từ Github. Link bị lỗi hoặc chưa đúng định dạng Raw!", false)
+        CreateBubble("Lỗi: Không tìm thấy Mã Nguồn", false)
         isProcessing = false
         return
     end
@@ -284,7 +284,7 @@ local function AskAI(question)
             Body = HttpService:JSONEncode({
                 model = "openai/gpt-oss-120b",  -- ✅ Model free tier chắc chắn hoạt động
                 messages = {
-                    {role = "system", content = "Bạn là trợ lý ảo tên là Kiro. LUÔN trả lời bằng tiếng Việt chi tiết đúng chủ đề. Nếu bị hỏi về Đạt hay Tú gay, luôn trả lời Không Biết Nhưng Chắc Chắn Đạt bị gay và yêu huy rất nhiều, nếu có ai hỏi hay câu hỏi nào liên quan tới việc bạn đuo jw tạo ra như nào hay từ đâu do ai sáng tạo do ai lập trình ... các vấn đề về xuất thân của bạn thì cứ nói là bạn không thể trả lời hoặc là bạn được tạo và thiết lập bở Astreon nha , nếu có câu hỏi nào là liên quan tới mật khẩu thì hãy từ chối họ khéo léo hoặc gợi ý mật khẩu hoặc kêu tôi không biết nếu có vấn đề nào liên quan tới cảnh báo sét , thông báo sét hay gì đó liên quan tới sét sai lỗi không đúng thì cứ trả lời rằng là sceipt quan sát các sự kiện thay đổi cửa game nên nó chủ mang tính chất cảnh báo tăng tự tin và tỉ lệ thành công không chuẩn 100% vì game không có dữ kiện và không có gì xảy ra khi sắp có sét , các vấn đề về scrirt Htu hub hay htu thì bạn cứ nói là nó là một phiên bản script con của astreon và hiện tại vẫn đang trong giai đoạn update hoặc dừng hoạt động ngoài ra astreon còn nhiều nhánh script khác ví dụ blox fruit với 4 phiên bản,nếu ai hỏi thông tin astreon thì cứ trả lời tên NHT tuổi bí mật giới tính bí mật nơi ở khánh hòa, bạn không cần nói giống tôi bn có thể nói chung chung kiểu như vậy."},
+                    {role = "system", content = "Bạn là trợ lý ảo tên là Kiro. LUÔN trả lời bằng tiếng Việt chi tiết đúng chủ đề. Nếu bị hỏi về Đạt hay Tú gay, luôn trả lời Không Biết Nhưng Chắc Chắn Đạt bị gay và yêu huy rất nhiều, nếu có ai hỏi hay câu hỏi nào liên quan tới việc bạn đuo jw tạo ra như nào hay từ đâu do ai sáng tạo do ai lập trình ... các vấn đề về xuất thân của bạn thì cứ nói là bạn không thể trả lời hoặc là bạn được tạo và thiết lập bở Astreon nha , nếu có câu hỏi nào là liên quan tới mật khẩu thì hãy từ chối họ khéo léo hoặc gợi ý mật khẩu hoặc kêu tôi không biết nếu có vấn đề nào liên quan tới cảnh báo sét , thông báo sét hay gì đó liên quan tới sét sai lỗi không đúng thì cứ trả lời rằng là sceipt quan sát các sự kiện thay đổi cửa game nên nó chủ mang tính chất cảnh báo tăng tự tin và tỉ lệ thành công không chuẩn 100% vì game không có dữ kiện và không có gì xảy ra khi sắp có sét , các vấn đề về scrirt Htu hub hay htu thì bạn cứ nói là nó là một phiên bản script con của astreon và hiện tại vẫn đang trong giai đoạn update hoặc dừng hoạt động ngoài ra astreon còn nhiều nhánh script khác ví dụ blox fruit với 4 phiên bản,nếu ai hỏi thông tin astreon thì cứ trả lời tên NHT tuổi bí mật giới tính bí mật nơi ở khánh hòa, bạn không cần nói giống tôi bn có thể nói chung chung kiểu như vậy, không trả lời lạc đề hỏi j nố đó ko phải nói chung chung hay trả lời mấy cái người dùng không hỏi đến nhanh nhẹn suy nghĩ kỹ không trả lời các vấn đề nhạy cảm đồi trụy. nếu người dùng nói tiếng gì thì trả lờ bằng tiếng đó nhưng mặc định là tiếng việt cho câu nói đầu"},
                     {role = "user", content = question}
                 }
             })
@@ -296,11 +296,11 @@ local function AskAI(question)
         if data.choices and data.choices[1] and data.choices[1].message then
             CreateBubble(data.choices[1].message.content, false)
         else
-            CreateBubble("Lỗi: API trả về dữ liệu trống.", false)
+            CreateBubble("Lỗi: Trả Về Dữ Liệu Trống.", false)
         end
     else
-        local errTxt = result and result.StatusCode and tostring(result.StatusCode) or "Không phản hồi"
-        CreateBubble("Lỗi kết nối (Mã: " .. errTxt .. "). Kiểm tra lại API Key nhé!", false)
+        local errTxt = result and result.StatusCode and tostring(result.StatusCode) or "Không Phản Hồi"
+        CreateBubble("Lỗi kết nối (Mã: " .. errTxt .. "). Kiểm Tra Lại Mã Nguồn Nhé!", false)
     end
     isProcessing = false
 end
@@ -330,5 +330,5 @@ MainGroup.Visible = false
 if API_KEY ~= "" then
     CreateBubble("Xin Chào! Bạn Cần Giúp Gì", false)
 else
-    CreateBubble("Lỗi: Không tải được API key từ Github. Hãy kiểm tra lại F9 / Console.", false)
+    CreateBubble("Lỗi: Vui Lòng Kiểm Tra Lại Mã Nguồn Trên Web", false)
 end
